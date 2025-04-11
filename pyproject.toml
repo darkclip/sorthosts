@@ -1,6 +1,6 @@
 [project]
 name = "sorthosts"
-version = "0.1.0"
+version = "0.1.1"
 description = "Sort ssh known_hosts file."
 keywords = ["sort", "ssh", "hosts", "known_hosts"]
 license = "MIT"

@@ -6,15 +6,15 @@ Sort ssh known_hosts file.
 - sort by IP addresses and domains
 
 
-## install
+## Install
 
 `pip install sorthosts`
 
 
 ## Usage
 
-- `-i` input file (default: ~/.ssh/known_hosts)
-- `-o` output file, print to screen if not defined
+- `INPUT` input file (default: ~/.ssh/known_hosts)
+- `OUTPUT` output file, print to screen if not defined
 
 `python3 -m sorthosts [-i INPUT] [-o OUTPUT]`
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-import re
 from pathlib import Path
 from collections import namedtuple
 
@@ -28,7 +27,7 @@ def run(args: argparse.Namespace) -> None:
     entryMap = {}
 
     with file_path.open(encoding='utf-8') as fp:
-        for lineNumber, line in enumerate(fp):
+        for _, line in enumerate(fp):
             content = line.strip().split()
             if len(content) == 0:
                 continue  # empty line -> skip
@@ -38,33 +37,25 @@ def run(args: argparse.Namespace) -> None:
             entry = HostEntry(*content)
             entryMap.setdefault(entry.key, []).append(entry)
 
-    compactEntryList = []
+    compact_entry_list = []
 
-    domain_pattern = re.compile(r'^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)?\.)+([a-zA-Z]{2,})$')
-    for key, entryList in entryMap.items():
-        domainList = []
-        ipList = []
+    for key, entry_list in entryMap.items():
+        host_list = []
         entry: HostEntry
-        for entry in entryList:
-            for domainOrIp in entry.host.split(','):
-                if not domainOrIp:
+        for entry in entry_list:
+            for hostname in entry.host.split(','):
+                if not hostname:
                     continue
-                start_loc = 0
-                if domainOrIp[0] == '[':
-                    start_loc = 1
-                if domain_pattern.match(domainOrIp[start_loc:]):
-                    domainList.append(domainOrIp)
-                else:
-                    ipList.append(domainOrIp)
-        host = ','.join(sorted(domainList) + sorted(ipList))
-        compactEntryList.append(HostEntry(host, *key.split(HostEntry.separator)))
+                host_list.append(hostname)
+        host = ','.join(sorted(host_list))
+        compact_entry_list.append(HostEntry(host, *key.split(HostEntry.separator)))
 
     output: Path | None = getattr(args, 'output', None)
     output_lines = '\n'.join(
         map(
             str,
             sorted(
-                compactEntryList,
+                compact_entry_list,
                 key=lambda entry: (
                     entry.host[1:] if entry.host.startswith('[') else entry.host
                 ),

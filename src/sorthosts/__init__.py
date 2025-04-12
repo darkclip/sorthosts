@@ -84,7 +84,7 @@ def main() -> None:
         '-i',
         '--input',
         type=Path,
-        default=f'{Path("~").expanduser()}/.ssh/known_hosts',
+        default=Path('~').expanduser() / '.ssh/known_hosts',
         help='file to read',
     )
     parser.add_argument('-o', '--output', type=Path, help='file to write')

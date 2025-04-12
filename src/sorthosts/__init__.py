@@ -47,7 +47,14 @@ def run(args: argparse.Namespace) -> None:
                 if not hostname:
                     continue
                 host_list.append(hostname)
-        host = ','.join(sorted(host_list))
+        host = ','.join(
+            sorted(
+                host_list,
+                key=lambda hostname: hostname[1:]
+                if hostname.startswith('[')
+                else hostname,
+            )
+        )
         compact_entry_list.append(HostEntry(host, *key.split(HostEntry.separator)))
 
     output: Path | None = getattr(args, 'output', None)
